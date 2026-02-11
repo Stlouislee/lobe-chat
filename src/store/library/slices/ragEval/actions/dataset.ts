@@ -19,10 +19,10 @@ const FETCH_DATASET_RECORD_KEY = 'FETCH_DATASET_RECORD_KEY';
 export interface RAGEvalDatasetAction {
   createNewDataset: (params: CreateNewEvalDatasets) => Promise<void>;
 
-  importDataset: (file: File, datasetId: number) => Promise<void>;
+  importDataset: (file: File, datasetId: string) => Promise<void>;
   refreshDatasetList: () => Promise<void>;
-  removeDataset: (id: number) => Promise<void>;
-  useFetchDatasetRecords: (datasetId: number | null) => SWRResponse<EvalDatasetRecord[]>;
+  removeDataset: (id: string) => Promise<void>;
+  useFetchDatasetRecords: (datasetId: string | null) => SWRResponse<EvalDatasetRecord[]>;
   useFetchDatasets: (knowledgeBaseId: string) => SWRResponse<RAGEvalDataSetItem[]>;
 }
 
@@ -42,7 +42,7 @@ export const createRagEvalDatasetSlice: StateCreator<
     const fileType = file.name.split('.').pop();
 
     if (fileType === 'jsonl') {
-      // jsonl 文件 需要拆分成单个条，然后逐一校验格式
+      // jsonl file needs to be split into individual entries, then validated one by one
       const jsonl = await file.text();
       const { default: JSONL } = await import('jsonl-parse-stringify');
 

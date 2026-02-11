@@ -16,8 +16,40 @@ export interface LocalFileItem {
   type: string;
 }
 
+export type ListLocalFileSortBy = 'name' | 'modifiedTime' | 'createdTime' | 'size';
+export type ListLocalFileSortOrder = 'asc' | 'desc';
+
 export interface ListLocalFileParams {
+  /**
+   * Maximum number of files to return
+   * @default 100
+   */
+  limit?: number;
+  /**
+   * Directory path to list
+   */
   path: string;
+  /**
+   * Field to sort by
+   * @default 'modifiedTime'
+   */
+  sortBy?: ListLocalFileSortBy;
+  /**
+   * Sort order
+   * @default 'desc'
+   */
+  sortOrder?: ListLocalFileSortOrder;
+}
+
+export interface ListLocalFilesResult {
+  /**
+   * List of files (truncated to limit)
+   */
+  files: LocalFileItem[];
+  /**
+   * Total count of files before truncation
+   */
+  totalCount: number;
 }
 
 export interface MoveLocalFileParams {
@@ -59,12 +91,12 @@ export interface LocalReadFilesParams {
 
 export interface WriteLocalFileParams {
   /**
-   * 要写入的内容
+   * Content to write
    */
   content: string;
 
   /**
-   * 要写入的文件路径
+   * File path to write to
    */
   path: string;
 }

@@ -165,6 +165,9 @@ export function defineConfig() {
     '/api/dev(.*)',
     '/webapi(.*)',
     '/trpc(.*)',
+    // version
+    '/api/version',
+    '/api/desktop/(.*)',
     // better auth
     '/signin',
     '/signup',
@@ -180,6 +183,7 @@ export function defineConfig() {
     '/market-auth-callback',
     // public share pages
     '/share(.*)',
+ 
   ]);
 
   const betterAuthMiddleware = async (req: NextRequest) => {
@@ -228,7 +232,6 @@ export function defineConfig() {
   };
 
   logDefault('Middleware configuration: %O', {
-    enableAuthProtection: appEnv.ENABLE_AUTH_PROTECTION,
     enableOIDC: authEnv.ENABLE_OIDC,
   });
 

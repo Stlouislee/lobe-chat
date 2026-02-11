@@ -302,18 +302,20 @@ export const chatTopic: StateCreator<
     await mutate(
       ['cronTopicsWithJobInfo', activeAgentId],
       (groups?: CronTopicsGroupWithJobInfo[]) => {
-        if (!groups) return groups;
+        if (!Array.isArray(groups)) return groups;
 
         let updated = false;
         const next = groups.map((group) => {
           let groupUpdated = false;
-          const topics = group.topics.map((topic) => {
-            if (topic.id !== id) return topic;
-            if (topic.favorite === favorite) return topic;
-            groupUpdated = true;
-            updated = true;
-            return { ...topic, favorite };
-          });
+          const topics = Array.isArray(group.topics)
+            ? group.topics.map((topic) => {
+                if (topic.id !== id) return topic;
+                if (topic.favorite === favorite) return topic;
+                groupUpdated = true;
+                updated = true;
+                return { ...topic, favorite };
+              })
+            : [];
 
           return groupUpdated ? { ...group, topics } : group;
         });
@@ -616,7 +618,7 @@ export const chatTopic: StateCreator<
     await topicService.batchRemoveTopics(topics.map((t) => t.id));
     await refreshTopic();
 
-    // 切换到默认 topic
+    // Switch to default topic
     switchTopic(null);
   },
 
